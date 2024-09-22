@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
         // exception me 3 para: kon sa resource nhi mil rha, kon sa field nhi mil rha , field ka value
 
         User user = this.userRepo.findById(userId)
-                .orElseThrow(()-> new ResourceNotFoundException("User","Id" , userId));
+                .orElseThrow(()-> new ResourceNotFoundException("User","User Id" , userId));
 
         // now update this 'user' with provided detail i.e 'userDto'.
         user.setName(userDto.getName());
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserById(Integer userId) {
 
         User user=this.userRepo.findById(userId)
-                .orElseThrow(()->new ResourceNotFoundException("User", "Id", userId));
+                .orElseThrow(()->new ResourceNotFoundException("User", "User Id", userId));
 
         return userToUserDto(user);
     }
@@ -76,10 +76,10 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Integer userId) {
         //get the user
         User user=this.userRepo.findById(userId)
-                .orElseThrow(()-> new ResourceNotFoundException("User", "Id", userId));
+                .orElseThrow(()-> new ResourceNotFoundException("User", "User Id", userId));
 
         //if user exists then delete
-        this.userRepo.deleteById(userId);
+        this.userRepo.delete(user);
 
     }
 

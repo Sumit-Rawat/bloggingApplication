@@ -1,12 +1,13 @@
 package com.blog.blog_app_apis.controllers;
 
-import com.blog.blog_app_apis.entities.User;
+
 import com.blog.blog_app_apis.payloads.ApiResponse;
 import com.blog.blog_app_apis.payloads.UserDto;
 import com.blog.blog_app_apis.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class UserController {
     //POST - create user
 
     @PostMapping("/")
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto)
+    public ResponseEntity<UserDto> createUser(@Validated @RequestBody UserDto userDto)
     {
         UserDto createdUserDto=this.userService.createUser(userDto);
         return new ResponseEntity<>(createdUserDto, HttpStatus.CREATED);
@@ -29,7 +30,7 @@ public class UserController {
 
     //PUT - update user
     @PutMapping("/{userId}")
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable("userId") Integer uId)
+    public ResponseEntity<UserDto> updateUser(@Validated @RequestBody UserDto userDto, @PathVariable("userId") Integer uId)
     {
         // agar naam same rakh rhe ho to pathVariable ke bracket me likhna jaroori nhi h.
         // else put path variable name in quotes in parenthesis and get thet in any variable name you want

@@ -5,6 +5,7 @@ import com.blog.blog_app_apis.exceptions.ResourceNotFoundException;
 import com.blog.blog_app_apis.payloads.UserDto;
 import com.blog.blog_app_apis.repositories.UserRepo;
 import com.blog.blog_app_apis.services.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -81,28 +85,33 @@ public class UserServiceImpl implements UserService {
 
     public User userDtoToUser(UserDto userDto)
     {
-        User user=new User();
+//        User user=new User();
+//
+//        user.setId(userDto.getId());
+//        user.setName(userDto.getName());
+//        user.setEmail(userDto.getEmail());
+//        user.setPassword(userDto.getPassword());
+//        user.setAbout(userDto.getAbout());
 
-        user.setId(userDto.getId());
-        user.setName(userDto.getName());
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-        user.setAbout(userDto.getAbout());
+        //instead of doing object conversion manually we will use model mapper for mapping
+        //will use map method which takes source object and the destination class to which the source object need to be mapped
+
+        User user=this.modelMapper.map(userDto,User.class);
 
         return user;
     }
 
     public UserDto userToUserDto(User user)
     {
-        UserDto userDto=new UserDto();
+//        UserDto userDto=new UserDto();
+//
+//        userDto.setId(user.getId());
+//        userDto.setName(user.getName());
+//        userDto.setEmail(user.getEmail());
+//        userDto.setPassword(user.getPassword());
+//        userDto.setAbout(user.getAbout());
 
-        userDto.setId(user.getId());
-        userDto.setName(user.getName());
-        userDto.setEmail(user.getEmail());
-        userDto.setPassword(user.getPassword());
-        userDto.setAbout(user.getAbout());
-
-        return userDto;
+        return this.modelMapper.map(user,UserDto.class);
     }
 
 

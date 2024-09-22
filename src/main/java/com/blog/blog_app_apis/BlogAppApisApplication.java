@@ -24,7 +24,7 @@ public class BlogAppApisApplication {
 
 	//to validate the methods that are annotated with @Valid or @Validated
 	@Bean
-	public MethodValidationPostProcessor methodValidationPostProcessor() {
+	public static MethodValidationPostProcessor methodValidationPostProcessor() {
 		return new MethodValidationPostProcessor();
 	}
 

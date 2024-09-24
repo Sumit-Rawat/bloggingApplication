@@ -1,6 +1,7 @@
 package com.blog.blog_app_apis.services;
 
 import com.blog.blog_app_apis.payloads.PostDto;
+import com.blog.blog_app_apis.payloads.PostResponse;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface PostService {
     PostDto getPostById(Integer postId);
 
     //get all post
-    List<PostDto> getAllPost();
+    PostResponse getAllPost(Integer pageNumber, Integer pageSize);
 
     //update post
     PostDto updatePost(PostDto postDto,Integer postId);

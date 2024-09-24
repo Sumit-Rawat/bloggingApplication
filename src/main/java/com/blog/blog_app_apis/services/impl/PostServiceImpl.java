@@ -5,12 +5,16 @@ import com.blog.blog_app_apis.entities.Post;
 import com.blog.blog_app_apis.entities.User;
 import com.blog.blog_app_apis.exceptions.ResourceNotFoundException;
 import com.blog.blog_app_apis.payloads.PostDto;
+import com.blog.blog_app_apis.payloads.PostResponse;
 import com.blog.blog_app_apis.repositories.CategoryRepo;
 import com.blog.blog_app_apis.repositories.PostRepo;
 import com.blog.blog_app_apis.repositories.UserRepo;
 import com.blog.blog_app_apis.services.PostService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -58,11 +62,27 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPost() {
-        List<Post> postList=this.postRepo.findAll();
-        List<PostDto> postDtoList=postList.stream().map((post)->this.modelMapper.map(post,PostDto.class)).toList();
+    public PostResponse getAllPost(Integer pageNumber, Integer pageSize) {
 
-        return postDtoList;
+        Pageable p= PageRequest.of(pageNumber,pageSize); // getting pageable object
+
+        Page<Post> postPage=this.postRepo.findAll(p); // get the page object by passing pageable object in findAll
+
+        List<Post> content = postPage.getContent(); // to get all post on that page
+
+        List<PostDto> postDtoList = content.stream().map((post) -> this.modelMapper.map(post, PostDto.class)).toList();
+
+        PostResponse response=new PostResponse();
+
+        response.setResults(postDtoList);
+        response.setPageNumber(postPage.getNumber());
+        response.setPageSize(postPage.getSize());
+        response.setTotalElements(postPage.getNumberOfElements());
+        response.setTotalPages(postPage.getTotalPages());
+        response.setLastPage(postPage.isLast());
+
+
+        return response;
     }
 
     @Override

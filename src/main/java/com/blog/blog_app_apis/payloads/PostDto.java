@@ -14,6 +14,8 @@ import java.util.Date;
 @NoArgsConstructor
 public class PostDto {
 
+    private Integer id;
+
     @NotEmpty
     @Size(max=100, message = "Title can be of max 100 characters")
     private String title;

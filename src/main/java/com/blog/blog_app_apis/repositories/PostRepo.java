@@ -12,4 +12,10 @@ public interface PostRepo extends JpaRepository<Post,Integer> {
     List<Post> findByUser(User user);
 
     List<Post> findByCategory(Category category);
+
+    // 'Title' field ka naam h. means ye title se search karega post ko.
+    // if you want to search on different field you can make give function name according to that.
+    // internally uses '%like' to find out the items from database.
+
+    List<Post> findByTitleContaining(String title);
 }

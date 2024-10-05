@@ -1,5 +1,6 @@
 package com.blog.blog_app_apis.controllers;
 
+import com.blog.blog_app_apis.config.AppConstants;
 import com.blog.blog_app_apis.payloads.ApiResponse;
 import com.blog.blog_app_apis.payloads.PostDto;
 import com.blog.blog_app_apis.payloads.PostResponse;
@@ -30,12 +31,13 @@ public class PostController {
     //GET - get all post
     @GetMapping("/posts")
     public ResponseEntity<PostResponse> getAllPost(
-            @RequestParam(name = "pageNumber", value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-            @RequestParam(name = "pageSize", value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
-            @RequestParam(name = "sortBy", value = "sortBy", defaultValue = "id", required = false) String sortBy
+            @RequestParam(name = "pageNumber", value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(name = "pageSize", value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(name = "sortBy", value = "sortBy", defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
+            @RequestParam(name = "sortDir", value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir
     )
     {
-        PostResponse postDtoList=this.postService.getAllPost(pageNumber, pageSize, sortBy);
+        PostResponse postDtoList=this.postService.getAllPost(pageNumber, pageSize, sortBy, sortDir);
 
         return new ResponseEntity<>(postDtoList,HttpStatus.OK);
     }
@@ -84,4 +86,14 @@ public class PostController {
 
         return new ResponseEntity<>(postDtoList, HttpStatus.OK);
     }
+
+    //GET - get post by title
+    @GetMapping("/posts/search/{keyword}")
+    public ResponseEntity<List<PostDto>> getPostByTitle(@PathVariable String keyword)
+    {
+        List<PostDto> postDtoList = this.postService.searchPost(keyword);
+
+        return new ResponseEntity<>(postDtoList, HttpStatus.OK);
+    }
+
 }

@@ -63,9 +63,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy) {
+    public PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
 
-        Pageable p= PageRequest.of(pageNumber, pageSize, Sort.by(sortBy)); // getting pageable object
+        // using ternary operator to decide sort direction
+        Sort sort=sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        Pageable p= PageRequest.of(pageNumber, pageSize, sort); // getting pageable object
 
         Page<Post> postPage=this.postRepo.findAll(p); // get the page object by passing pageable object in findAll
 
@@ -139,6 +142,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> searchPost(String keyword) {
-        return List.of();
+
+        // agar 'title' me ye 'keyword' hoga to us posts ko layega.
+        List<Post> postsContainingTitle = this.postRepo.findByTitleContaining(keyword);
+
+        List<PostDto> postDtoList = postsContainingTitle.stream().map((post) -> this.modelMapper.map(post, PostDto.class)).toList();
+
+        return postDtoList;
     }
 }

@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -35,5 +36,7 @@ public class PostDto {
 
     @NotEmpty
     private CategoryDto category;
+
+    private Set<CommentDto> comments;
 
 }

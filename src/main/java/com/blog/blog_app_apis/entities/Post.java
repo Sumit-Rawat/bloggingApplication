@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "posts")
@@ -37,5 +39,8 @@ public class Post {
     //A post will be associated with a category or many post can be mapped to a single category
     @ManyToOne
     private Category category; //post kis category ka h
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private Set<Comment> comments=new HashSet<>();
 
 }

@@ -1,12 +1,16 @@
 package com.blog.blog_app_apis.services.impl;
 
+import com.blog.blog_app_apis.config.AppConstants;
+import com.blog.blog_app_apis.entities.Role;
 import com.blog.blog_app_apis.entities.User;
 import com.blog.blog_app_apis.exceptions.ResourceNotFoundException;
 import com.blog.blog_app_apis.payloads.UserDto;
+import com.blog.blog_app_apis.repositories.RoleRepo;
 import com.blog.blog_app_apis.repositories.UserRepo;
 import com.blog.blog_app_apis.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +23,13 @@ public class UserServiceImpl implements UserService {
     private UserRepo userRepo;
 
     @Autowired
+    private RoleRepo roleRepo;
+
+    @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -30,6 +40,27 @@ public class UserServiceImpl implements UserService {
         User user=userDtoToUser(userDto);
         User savedUser=this.userRepo.save(user);
         return userToUserDto(savedUser); // return karte samay phir change kar denge kyuki return type is UserDto
+    }
+
+
+    // register new user
+    @Override
+    public UserDto registerNewUser(UserDto userDto) {
+
+        User user = this.modelMapper.map(userDto, User.class);
+
+        // encode password
+        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+
+        // setting the roles to user
+        // nya user ko phle admin bnayenge
+        Role role = this.roleRepo.findById(AppConstants.NORMAL_USER).get();
+
+        user.getRoles().add(role);
+
+        User newUser = this.userRepo.save(user);
+
+        return this.modelMapper.map(newUser, UserDto.class);
     }
 
     @Override
@@ -82,6 +113,8 @@ public class UserServiceImpl implements UserService {
         this.userRepo.delete(user);
 
     }
+
+
 
     public User userDtoToUser(UserDto userDto)
     {

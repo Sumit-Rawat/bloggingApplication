@@ -7,6 +7,7 @@ import com.blog.blog_app_apis.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +41,8 @@ public class UserController {
 
 
     //DELETE - delete user
+    // only admin can delete user
+    @PreAuthorize("hasRole('ADMIN')") // for role based auth
     @DeleteMapping("/{userId}")
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable Integer userId)
     {

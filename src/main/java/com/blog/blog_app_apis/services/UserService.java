@@ -13,6 +13,9 @@ public interface UserService {
     //create user
     UserDto createUser(UserDto user);
 
+    // register new user
+    UserDto registerNewUser(UserDto user);
+
     //update user
     UserDto updateUser(UserDto user,Integer userId);
 
